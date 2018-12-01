@@ -13,6 +13,8 @@ from operator import itemgetter
 import first
 import thinkstats2
 
+import random
+
 
 def Mode(hist):
     """Returns the value with the highest frequency.
@@ -21,6 +23,12 @@ def Mode(hist):
 
     returns: value from Hist
     """
+    maxFreq = hist.MaxLike()
+
+    for value, freq in hist.Items():
+    	if freq == maxFreq:
+    		return value
+
     return 0
 
 
@@ -31,7 +39,15 @@ def AllModes(hist):
 
     returns: iterator of value-freq pairs
     """
-    return []
+    sortedFreqs = sorted(hist.Freqs(hist.Values()), reverse = True)
+    
+    sortedHistList = []
+    for x in sortedFreqs:
+    	for value, freq in hist.Items():
+    		if freq == x:
+    			sortedHistList.append([value, freq])
+
+    return sortedHistList
 
 
 def main(script):
@@ -42,7 +58,7 @@ def main(script):
     live, firsts, others = first.MakeFrames()
     hist = thinkstats2.Hist(live.prglngth)
 
-    # test Mode    
+    # # test Mode    
     mode = Mode(hist)
     print('Mode of preg length', mode)
     assert mode == 39, mode
